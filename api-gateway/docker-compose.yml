@@ -1,0 +1,16 @@
+services:
+  gateway-service:
+    image: gateway-service:latest
+    container_name: gateway-service
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    networks:
+      - spring-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+
+networks:
+  spring-network:
+    external: true
