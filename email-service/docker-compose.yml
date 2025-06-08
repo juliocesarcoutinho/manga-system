@@ -5,18 +5,18 @@ services:
       context: .
     container_name: email-service
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - DB_HOST=mysql-email
-      - DB_PORT=3306
-      - DB_NAME=email_service
-      - DB_USERNAME=email_user
-      - DB_PASSWORD=email_password
-      - EMAIL_HOST=smtp.titan.email
-      - EMAIL_PORT=465
-      - USER_NAME=${EMAIL_USERNAME}
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - EMAIL_USERNAME=${EMAIL_USERNAME}
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
-      - EUREKA_URI=http://eureka-server:8761/eureka
-      - SERVER_PORT=8081
+      - EUREKA_URI=${EUREKA_URI}
+      - SERVER_PORT=${SERVER_PORT}
     depends_on:
       mysql-email:
         condition: service_healthy
@@ -30,7 +30,7 @@ services:
           "--quiet",
           "--tries=1",
           "--spider",
-          "http://localhost:8081/actuator/health",
+          "http://localhost:${SERVER_PORT}/actuator/health",
         ]
       interval: 30s
       timeout: 5s
@@ -42,10 +42,10 @@ services:
     image: mysql:8.0
     container_name: mysql-email
     environment:
-      - MYSQL_DATABASE=email_service
-      - MYSQL_USER=email_user
-      - MYSQL_PASSWORD=email_password
-      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - mysql-email-data:/var/lib/mysql
     ports:
