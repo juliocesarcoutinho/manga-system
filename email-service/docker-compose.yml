@@ -1,0 +1,77 @@
+services:
+  # Email Service
+  email-service:
+    build:
+      context: .
+    container_name: email-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_HOST=mysql-email
+      - DB_PORT=3306
+      - DB_NAME=email_service
+      - DB_USERNAME=email_user
+      - DB_PASSWORD=email_password
+      - EMAIL_HOST=smtp.titan.email
+      - EMAIL_PORT=465
+      - USER_NAME=${EMAIL_USERNAME}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - EUREKA_URI=http://eureka-server:8761/eureka
+      - SERVER_PORT=8081
+    depends_on:
+      mysql-email:
+        condition: service_healthy
+    networks:
+      - spring-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:8081/actuator/health",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  # MySQL for Email Service
+  mysql-email:
+    image: mysql:8.0
+    container_name: mysql-email
+    environment:
+      - MYSQL_DATABASE=email_service
+      - MYSQL_USER=email_user
+      - MYSQL_PASSWORD=email_password
+      - MYSQL_ROOT_PASSWORD=root_password
+    volumes:
+      - mysql-email-data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - spring-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p$$MYSQL_ROOT_PASSWORD",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+networks:
+  spring-network:
+    external: true
+
+volumes:
+  mysql-email-data:
