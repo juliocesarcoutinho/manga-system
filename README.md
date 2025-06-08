@@ -1,2 +1,2 @@
-# manga-system
+# Mangá System
 System for reading mangás
