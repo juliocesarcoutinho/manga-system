@@ -44,3 +44,11 @@ eureka:
 
 server:
   port: ${SERVER_PORT:8081}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    config-url: /email-service/v3/api-docs/swagger-config
+    url: /email-service/v3/api-docs
