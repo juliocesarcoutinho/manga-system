@@ -1,0 +1,27 @@
+-- Inserindo roles padrão
+INSERT INTO tb_roles (id, authority) VALUES ('b29f27a8-9aa2-4977-8369-8d9a131ac51c', 'ROLE_ADMIN');
+INSERT INTO tb_roles (id, authority) VALUES ('23a9d4a7-df2e-4d48-9f69-212cc02e6c52', 'ROLE_USER');
+INSERT INTO tb_roles (id, authority) VALUES ('f5e02f37-9b47-4229-8177-a1c6df127f0a', 'ROLE_EDITOR');
+
+-- Inserindo usuários com senhas criptografadas
+-- Senha: admin123 (criptografada com BCrypt)
+INSERT INTO tb_users (id, fullname, email, password, created_at, active) 
+VALUES ('b5b21759-c5d1-4db2-8079-65f3c7f5c1fa', 'Administrador', 'admin@email.com', 
+        '$2a$10$9WE/UahP74z.UPdj0fxzL.M5YrxAlFq5yRrgTC6SLCd6qlEN1MKpO', 
+        CURRENT_TIMESTAMP, true);
+
+-- Senha: user123 (criptografada com BCrypt)
+INSERT INTO tb_users (id, fullname, email, password, created_at, active) 
+VALUES ('14278e54-7e77-4864-a52f-ebf03d2e0ae6', 'Usuário Comum', 'user@email.com', 
+        '$2a$10$WRC.RhZ2uVEKIPvZ7yTZXuGZKGu.8TEtSK32C9JgCljxY.uVmJGPC', 
+        CURRENT_TIMESTAMP, true);
+
+-- Associando roles aos usuários
+INSERT INTO tb_users_roles (user_id, role_id) 
+VALUES ('b5b21759-c5d1-4db2-8079-65f3c7f5c1fa', 'b29f27a8-9aa2-4977-8369-8d9a131ac51c');
+
+INSERT INTO tb_users_roles (user_id, role_id) 
+VALUES ('b5b21759-c5d1-4db2-8079-65f3c7f5c1fa', '23a9d4a7-df2e-4d48-9f69-212cc02e6c52');
+
+INSERT INTO tb_users_roles (user_id, role_id) 
+VALUES ('14278e54-7e77-4864-a52f-ebf03d2e0ae6', '23a9d4a7-df2e-4d48-9f69-212cc02e6c52');
